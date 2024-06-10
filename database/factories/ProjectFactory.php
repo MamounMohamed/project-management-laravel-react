@@ -18,6 +18,14 @@ class ProjectFactory extends Factory
     {
         return [
             //
+            "name"=> fake()->sentence(4),
+            "description"=> fake()->realText(),
+            "due_date"=>fake()->dateTimeBetween("now","+1 year"),
+            "image_path"=>fake()->imageUrl(),
+            "status"=>fake()->randomElement(["pending","in_progress","completed"]),
+            "created_by" => 1,
+            "updated_by"=>1,
+
         ];
     }
 }
