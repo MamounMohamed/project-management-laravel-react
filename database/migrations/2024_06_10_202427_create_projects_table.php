@@ -14,6 +14,13 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('name');
+            $table->longtext('description')->nullable();
+            $table->string('image_path')->nullable();
+            $table->string('status');
+            $table->timestamp('due_date')->nullable();
+            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('updated_by')->constrained('users');
         });
     }
 
