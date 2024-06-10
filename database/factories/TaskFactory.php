@@ -23,9 +23,12 @@ class TaskFactory extends Factory
             "image_path"=>fake()->imageUrl(),
             "status"=>fake()->randomElement(["pending","in_progress","completed"]),
             "priority" => fake()->randomElement(["low","medium","high"]),
-            "assigned_user"=>1,
-            "created_by" => 1,
-            "updated_by"=>1,
+            "assigned_user"=>fake()->numberBetween(1,10),
+            "created_by" => fake()->numberBetween(1,10),
+            "updated_by"=>fake()->numberBetween(1,10),
+            "created_at"=>time(),
+            "updated_at"=>time(),
+
 
         ];
     }
