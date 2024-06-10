@@ -24,7 +24,9 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
+
                             </div>
+
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
