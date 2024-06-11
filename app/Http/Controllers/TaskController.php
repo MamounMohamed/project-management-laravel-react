@@ -20,21 +20,25 @@ class TaskController extends Controller
         $query = Task::query();
 
         if(request('name')){
-            $query -> where('name','like','%'.request('name').'%');
+            $query -> where('tasks.name','like','%'.request('name').'%');
         } 
         if(request('status')){
-            $query -> where('status', request('status'));
+            $query -> where('tasks.status', request('status'));
         }
         if(request('priority')){
-            $query -> where('priority',request('priority'));
+            $query -> where('tasks.priority',request('priority'));
         }
+        if(request('project_name')){
+            $query->join('projects', 'projects.id', '=', 'tasks.project_id')
+            ->where('projects.name', 'like', '%' . request('project_name') . '%');
+              }
+
         $tasks = $query->orderBy($sortField,$sortDirection)->paginate(10)->onEachSide(1);
         return inertia("Task/Index",
         ["tasks" => TaskResource::collection($tasks),
         "queryParams" => request()->query()?:null,
     ]);
     }
-    
 
     /**
      * Show the form for creating a new resource.

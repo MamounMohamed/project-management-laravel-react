@@ -7,38 +7,24 @@ import Pagination from "@/Components/Pagination";
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
-export default function Index({ auth, projects, queryParams = null }) {
-    queryParams = queryParams || {};
+export default function Index({ auth, projects , queryParams = null}) {
+    queryParams = queryParams||{};
 
-    const searchField = (fieldName, value) => {
-        if (value) {
+    const searchField = (fieldName , value) =>{
+        if(value){
             queryParams[fieldName] = value;
-        } else {
+        }else{
             delete queryParams[fieldName];
         }
-        router.get(route('project.index'), queryParams);
+        router.get(route('project.index'),queryParams);
     }
     const onKeyPress = (name, e) => {
         if (e.key !== "Enter") return;
-
+    
         searchFieldChanged(name, e.target.value);
-    };
-
-    const sortByField = (fieldName) => {
-        if (fieldName === queryParams.sort_field) {
-            if (queryParams.sort_direction === "asc") {
-                queryParams.sort_direction = "desc";
-            } else {
-                queryParams.sort_direction = "asc";
-            }
-        } else {
-            queryParams.sort_field = fieldName;
-            queryParams.sort_direction = "asc";
-        }
-        router.get(route('project.index'), queryParams);
-
-    };
-
+      };
+    
+    
     return <AuthenticatedLayout
         user={auth.user}
         header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Projects</h2>}
@@ -52,62 +38,34 @@ export default function Index({ auth, projects, queryParams = null }) {
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                 <tr className="text-nowrap">
-                                    <TableHeader name={"id"}
-                                        sort_field={queryParams.sort_field}
-                                        sort_direction={queryParams.sort_direction}
-                                        sortByField={sortByField}
-                                        sortable={true}>Id</TableHeader>
-                                    <TableHeader name={"image"} >Image</TableHeader>
-                                    <TableHeader name={"name"}
-                                        sortByField={sortByField}
-                                        sort_field={queryParams.sort_field}
-                                        sort_direction={queryParams.sort_direction}
-                                        sortable={true}>Name</TableHeader>
-                                    <TableHeader name={"status"}
-                                        sortByField={sortByField}
-                                        sort_field={queryParams.sort_field}
-                                        sort_direction={queryParams.sort_direction}
-                                        sortable={true} >Status</TableHeader>
-                                    <TableHeader name={"created_at"}
-                                        sortByField={sortByField}
-                                        sort_field={queryParams.sort_field}
-                                        sort_direction={queryParams.sort_direction}
-                                        sortable={true}>Created At</TableHeader>
-                                    <TableHeader  >Created By</TableHeader>
-                                    <TableHeader name={"due_date"}
-                                        sortByField={sortByField}
-                                        sort_field={queryParams.sort_field}
-                                        sort_direction={queryParams.sort_direction}
-                                        sortable={true}>Due Date</TableHeader>
-                                    <TableHeader>Actions</TableHeader>
+                                    <TableHeader>Id</TableHeader>
+                                    <TableHeader>Image</TableHeader>
+                                    <TableHeader>Name</TableHeader>
+                                    <TableHeader>Status</TableHeader>
+                                    <TableHeader>Created At</TableHeader>
+                                    <TableHeader>Created By</TableHeader>
+                                    <TableHeader>Due Date</TableHeader>
+                                    <TableHeader >Actions</TableHeader>
                                 </tr>
-                            </thead>
+                            </thead> 
 
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                 <tr className="text-nowrap">
-                                    <TableHeader ></TableHeader>
-                                    <TableHeader ></TableHeader>
-                                    <TableHeader><TextInput
-                                        className="w-full"
-                                        placeholder="Project Name"
-                                        defaultValue={queryParams.name}
-
-                                        onBlur={(e) =>
-                                            searchField("name", e.target.value)}
-                                        onKeyPress={(e) => onKeyPress("name", e)} />
-
+                                    <TableHeader></TableHeader>
+                                    <TableHeader></TableHeader>
+                                    <TableHeader><TextInput className = "w-full" placeholder ="Project Name" onBlur={(e) => searchField("name", e.target.value)} onKeyPress={(e) => onKeyPress("name", e)}></TextInput>
+                          
                                     </TableHeader>
                                     <TableHeader>
-                                        <SelectInput className="w-full"
-                                            defaultValue={queryParams.status}
-                                            onChange={(e) => searchField("status", e.target.value)}>
-
-                                            <option value="">Select Status</option>
-                                            <option value="pending">Pending</option>
-                                            <option value="in_progress">In Progress</option>
-                                            <option value="completed">Completed</option>
-
-                                        </SelectInput>
+                                        <SelectInput className = "w-full"
+                                        onChange={(e)=>searchField("status",e.target.value)}>
+                                        
+                                        <option value ="">Select Status</option>
+                                        <option value ="pending">Pending</option>
+                                        <option value = "in_progress">In Progress</option>
+                                        <option value ="completed">Completed</option>
+                                        
+                                    </SelectInput>
                                     </TableHeader>
                                     <TableHeader> </TableHeader>
                                     <TableHeader></TableHeader>
@@ -126,10 +84,10 @@ export default function Index({ auth, projects, queryParams = null }) {
                                         </TableData>
                                         <TableData>{project.name}</TableData>
                                         <TableData>
-                                            <div className={"rounded text-white px-2 py-1 text-center " + PROJECT_STATUS_CLASS_MAP[project.status]}>
+                                            <div className= {"rounded text-white px-2 py-1 text-center "+PROJECT_STATUS_CLASS_MAP[project.status]}>
                                                 {PROJECT_STATUS_TEXT_MAP[project.status]}
                                             </div>
-                                        </TableData>
+                                            </TableData>
                                         <TableData>{project.created_at}</TableData>
                                         <TableData>{project.created_by.name}</TableData>
                                         <TableData>{project.due_date}</TableData>

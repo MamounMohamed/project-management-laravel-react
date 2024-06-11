@@ -50,7 +50,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div className="p-6 text-gray-900 dark:text-gray-100 snap-mandatory snap-x">
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+                        <table className=" snap-x w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                 <tr className="text-nowrap">
                                     <TableHeader name={"id"}
@@ -60,7 +60,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                         sortable={true}>Id</TableHeader>
                                     <TableHeader name={"image"} >Image</TableHeader>
                                     <TableHeader name = {"project"}> Project</TableHeader>
-                                    <TableHeader name={"name"}
+                                    <TableHeader name={"task_name"}
                                         sortByField={sortByField}
                                         sort_field={queryParams.sort_field}
                                         sort_direction={queryParams.sort_direction}
@@ -95,15 +95,23 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                 <tr className="text-nowrap">
                                     <TableHeader ></TableHeader>
                                     <TableHeader ></TableHeader>
-                                    <TableHeader ></TableHeader>
+                                    <TableHeader >
+                                    <TextInput
+                                        className="w-full"
+                                        placeholder="Project Name"
+                                        defaultValue={queryParams.project_name}
 
+                                        onBlur={(e) =>
+                                            searchField("project_name", e.target.value)}
+                                        onKeyPress={(e) => onKeyPress("project_name", e)} />
+</TableHeader>
                                     <TableHeader><TextInput
                                         className="w-full"
                                         placeholder="Task Name"
                                         defaultValue={queryParams.name}
 
                                         onBlur={(e) =>
-                                            searchField("name", e.target.value)}
+                                            searchField("task_name", e.target.value)}
                                         onKeyPress={(e) => onKeyPress("name", e)} />
 
                                     </TableHeader>
@@ -133,7 +141,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                     </TableHeader>
                                     <TableHeader></TableHeader>
                                     <TableHeader></TableHeader>
-
+                                    <TableHeader ></TableHeader>
                                     <TableHeader ></TableHeader>
                                 </tr>
                             </thead>
@@ -147,7 +155,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                             <img src={task.image_path} alt="" style={{ width: 60 }} />
                                         </TableData>
                                         <TableData> {task.project_id.name}</TableData>
-                                        <TableData>{task.name}</TableData>
+                                        <TableData>{task.task_name}</TableData>
                                         <TableData>
                                             <div className={"rounded text-white px-2 py-1 text-center " + TASK_STATUS_CLASS_MAP[task.status]}>
                                                 {TASK_STATUS_TEXT_MAP[task.status]}
@@ -156,7 +164,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
                                         </TableData>
 
                                         <TableData>
-                                        <div className={"rounded text-white px-2 py-1 text-center " +TASK_PRIORITY_CLASS_MAP[task.status]}>
+                                        <div className={"rounded text-white px-2 py-1 text-center " +TASK_PRIORITY_CLASS_MAP[task.priority]}>
                                                 {TASK_PRIORITY_TEXT_MAP[task.priority]}
                                             </div>
 

@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+
 class TaskResource extends JsonResource
 {
     /**
@@ -20,6 +21,7 @@ class TaskResource extends JsonResource
             "description"=> $this->description,
             "image_path"=> $this->image_path,
             "status" =>$this->status,
+            "priority" =>$this->priority,
             "due_date"=>(new Carbon($this->due_date))->format("Y-m-d"),
             "created_at"=>(new Carbon($this->created_at))->format("Y-m-d"),
             "assigned_user" => new UserResource($this->assignedUser),
