@@ -4,10 +4,11 @@ import { Head, Link, router } from "@inertiajs/react";
 import TableData from "@/Components/TableData";
 import TableHeader from "@/Components/TableHeader";
 import Pagination from "@/Components/Pagination";
-import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
+import { TASK_PRIORITY_CLASS_MAP, TASK_PRIORITY_TEXT_MAP, TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
-export default function Index({ auth, projects, queryParams = null }) {
+
+export default function Index({ auth, tasks, queryParams = null }) {
     queryParams = queryParams || {};
 
     const searchField = (fieldName, value) => {
@@ -16,7 +17,7 @@ export default function Index({ auth, projects, queryParams = null }) {
         } else {
             delete queryParams[fieldName];
         }
-        router.get(route('project.index'), queryParams);
+        router.get(route('task.index'), queryParams);
     }
     const onKeyPress = (name, e) => {
         if (e.key !== "Enter") return;
@@ -35,15 +36,15 @@ export default function Index({ auth, projects, queryParams = null }) {
             queryParams.sort_field = fieldName;
             queryParams.sort_direction = "asc";
         }
-        router.get(route('project.index'), queryParams);
+        router.get(route('task.index'), queryParams);
 
     };
 
     return <AuthenticatedLayout
         user={auth.user}
-        header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Projects</h2>}
+        header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Tasks</h2>}
     >
-        <Head title="Projects" />
+        <Head title="Tasks" />
 
         <div className="py-12">
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -58,6 +59,7 @@ export default function Index({ auth, projects, queryParams = null }) {
                                         sortByField={sortByField}
                                         sortable={true}>Id</TableHeader>
                                     <TableHeader name={"image"} >Image</TableHeader>
+                                    <TableHeader name = {"project"}> Project</TableHeader>
                                     <TableHeader name={"name"}
                                         sortByField={sortByField}
                                         sort_field={queryParams.sort_field}
@@ -67,7 +69,13 @@ export default function Index({ auth, projects, queryParams = null }) {
                                         sortByField={sortByField}
                                         sort_field={queryParams.sort_field}
                                         sort_direction={queryParams.sort_direction}
-                                        sortable={true} >Status</TableHeader>
+                                        sortable={true}>Status</TableHeader>
+
+                                    <TableHeader name={"priority"}
+                                        sortByField={sortByField}
+                                        sort_field={queryParams.sort_field}
+                                        sort_direction={queryParams.sort_direction}
+                                        sortable={true} >Priority</TableHeader>
                                     <TableHeader name={"created_at"}
                                         sortByField={sortByField}
                                         sort_field={queryParams.sort_field}
@@ -87,9 +95,11 @@ export default function Index({ auth, projects, queryParams = null }) {
                                 <tr className="text-nowrap">
                                     <TableHeader ></TableHeader>
                                     <TableHeader ></TableHeader>
+                                    <TableHeader ></TableHeader>
+
                                     <TableHeader><TextInput
                                         className="w-full"
-                                        placeholder="Project Name"
+                                        placeholder="Task Name"
                                         defaultValue={queryParams.name}
 
                                         onBlur={(e) =>
@@ -109,39 +119,61 @@ export default function Index({ auth, projects, queryParams = null }) {
 
                                         </SelectInput>
                                     </TableHeader>
-                                    <TableHeader> </TableHeader>
+                                    <TableHeader>
+                                        <SelectInput className="w-full"
+                                            defaultValue={queryParams.priority}
+                                            onChange={(e) => searchField("priority", e.target.value)}>
+
+                                            <option value="">Select Priority</option>
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+
+                                        </SelectInput>
+                                    </TableHeader>
                                     <TableHeader></TableHeader>
                                     <TableHeader></TableHeader>
+
                                     <TableHeader ></TableHeader>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {projects.data.map((project) => (
-                                    <tr key={project.id}
+                                {tasks.data.map((task) => (
+                                    <tr key={task.id}
                                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"                                    >
-                                        <TableData>{project.id}</TableData>
+                                        <TableData>{task.id}</TableData>
                                         <TableData>
-                                            <img src={project.image_path} alt="" style={{ width: 60 }} />
+                                            <img src={task.image_path} alt="" style={{ width: 60 }} />
                                         </TableData>
-                                        <TableData>{project.name}</TableData>
+                                        <TableData> {task.project_id.name}</TableData>
+                                        <TableData>{task.name}</TableData>
                                         <TableData>
-                                            <div className={"rounded text-white px-2 py-1 text-center " + PROJECT_STATUS_CLASS_MAP[project.status]}>
-                                                {PROJECT_STATUS_TEXT_MAP[project.status]}
+                                            <div className={"rounded text-white px-2 py-1 text-center " + TASK_STATUS_CLASS_MAP[task.status]}>
+                                                {TASK_STATUS_TEXT_MAP[task.status]}
                                             </div>
+
                                         </TableData>
-                                        <TableData>{project.created_at}</TableData>
-                                        <TableData>{project.created_by.name}</TableData>
-                                        <TableData>{project.due_date}</TableData>
+
+                                        <TableData>
+                                        <div className={"rounded text-white px-2 py-1 text-center " +TASK_PRIORITY_CLASS_MAP[task.status]}>
+                                                {TASK_PRIORITY_TEXT_MAP[task.priority]}
+                                            </div>
+
+                                        </TableData>
+
+                                        <TableData>{task.created_at}</TableData>
+                                        <TableData>{task.created_by.name}</TableData>
+                                        <TableData>{task.due_date}</TableData>
                                         <TableData>
                                             <Link
-                                                href={route("project.edit", project.id)}
+                                                href={route("task.edit", task.id)}
                                                 className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
                                             >
                                                 Edit
                                             </Link>
 
-                                            <Link href={route("project.destroy", project.id)}
+                                            <Link href={route("task.destroy", task.id)}
                                                 className="font-medium text-red--600 dark:text-red-500 hover:underline mx-1"
                                             >
                                                 Delete
@@ -155,7 +187,7 @@ export default function Index({ auth, projects, queryParams = null }) {
                             </tbody>
 
                         </table>
-                        <Pagination links={projects.meta.links}></Pagination>
+                        <Pagination links={tasks.meta.links}></Pagination>
                     </div>
                 </div>
             </div>
